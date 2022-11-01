@@ -20,7 +20,9 @@ connection.authenticate()
 }).catch((err) => {
     console.log(err)
 })
-
+app.get("/", (req,res) => {
+    res.sendStatus(200);
+});
 app.get("/games", (req,res) => {
     Games.findAll().then(games => {
         res.json(games)
