@@ -1,13 +1,17 @@
+require('dotenv').config()
+
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
 const connection = require('./database/database');
 const Games = require("./Games/Games");
+const cors = require("cors");
 
+const port = process.env.PORT || 3000
+
+app.use(cors());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json())
-
-app.set('view engine', 'ejs');
 
 // database 
 connection.authenticate()
@@ -42,14 +46,15 @@ app.get("/games/:id", (req,res) => {
 app.post("/games", (req,res) => {
     let conteudo = req.body;
     
-        if (conteudo.title == "" || conteudo.price == ""){
+        if (conteudo.title == "" || conteudo.price == "" || conteudo.genus == ""){
            res.sendStatus(400);
         } else {
             Games.create({
                 title: conteudo.title,
                 year: conteudo.year,
-                price: conteudo.price,
-                picture: conteudo.picture,
+                producer: conteudo.producer,
+                genus: conteudo.genus,
+                picture: conteudo.picture
             }).then(() => {
                 res.sendStatus(200);
             }).catch((err) => {
@@ -75,7 +80,8 @@ app.put("/games/:id", (req,res) => {
             Games.update({
                 title: conteudo.title,
                 year: conteudo.year,
-                price: conteudo.price,
+                producer: conteudo.producer,
+                genus: conteudo.genus,
                 picture: conteudo.picture
             },{where: {id: id}}).then(game=> {
                 res.sendStatus(200);
@@ -109,6 +115,6 @@ app.delete("/games/:id", (req,res) => {
     
 });
 
-app.listen(8080, () => {
-    console.log("server is ON!")
-})
+app.listen(port, () => {
+    console.log("server is ON!");
+});
