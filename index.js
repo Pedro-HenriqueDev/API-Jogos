@@ -18,7 +18,9 @@ connection.authenticate()
 }).catch((err) => {
     console.log(err)
 })
-
+app.get("/", (req,res) => {
+    res.sendStatus(200);
+});
 app.get("/games", (req,res) => {
     Games.findAll().then(games => {
         res.setHeader('Access-Control-Allow-Origin', "https://apigamesinfo.herokuapp.com")
@@ -114,7 +116,13 @@ app.delete("/games/:id", (req,res) => {
     
 });
 
+<<<<<<< HEAD
 const server = app.listen(process.env.PORT || 5000, () => {
     const port = server.address().port;
     console.log(`Express is working on port ${port}`);
 });
+=======
+app.listen(port, () => {
+    console.log("server is ON!");
+});
+>>>>>>> 7703ff8d1a9cb690a05edd3cefe5ae74ab4037ab
