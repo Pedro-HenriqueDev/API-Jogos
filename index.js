@@ -7,8 +7,6 @@ const connection = require('./database/database');
 const Games = require("./Games/Games");
 const cors = require("cors");
 
-const port = process.env.PORT || 3000
-
 app.use(cors());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json())
@@ -23,6 +21,7 @@ connection.authenticate()
 
 app.get("/games", (req,res) => {
     Games.findAll().then(games => {
+        res.setHeader('Access-Control-Allow-Origin', "https://apigamesinfo.herokuapp.com")
         res.json(games)
     }).catch((err) => {
         res.sendStatus(400);
@@ -115,6 +114,7 @@ app.delete("/games/:id", (req,res) => {
     
 });
 
-app.listen(port, () => {
-    console.log("server is ON!");
+const server = app.listen(process.env.PORT || 5000, () => {
+    const port = server.address().port;
+    console.log(`Express is working on port ${port}`);
 });
